@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+ 
+    <!-- jQuery validation plugin to validate forms'-->
+  
+
+  
+
+    <title>User Registration Form</title>
+    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+
+   
+    //Reload-function
+    $(document).ready(function (){
+
+        var index=1; var currentROw=null;
+
+
+    //     $('#userDetailForm').validate({ // initialize the plugin
+    //     rules: {
+    //         FirstName : {
+    //             required: true,
+    //             // email: true
+    //         },
+    //     //     field2: {
+    //     //         required: true,
+    //     //         minlength: 5
+    //     //     }
+    //     // },
+    //     submitHandler: function (form) { // for demo
+    //         alert('valid form submitted'); // for demo
+    //         return false; // for demo
+    //     }
+    // }) ;
+
+
+         //functioning of submit form on click submit button
+
+        $("#submitButton").click(function(){
+
+
+
+            //Validation to ensure proper indexing:
+    index=$("#userDetailTable tr").length;
+   
+   //Form Validation to ensure First Name ,Last Name,Email,Mobile No. shouldn't be kept empty:-
+  
+  
+           
+            var firstName=$("#firstName").val();
+            var lastName=$("#LastName").val();
+            var email=$("#email").val();
+            var mobile=$("#mobile-no").val();
+         
+            
+             currentROw = '<tr><td id="ind">'+index+'</td><td>'+firstName+'</td><td>'
+            +lastName+'</td><td>'+email+'</td><td>'+mobile+'</td>'
+            +'<td><button class="btn btn-sm btn-success mr-3" id="edit-current-row-button">Edit</button>'
+            +'<button class="btn btn-sm btn-danger" id="delete-current-row-button">Delete</button></td></tr>';
+            
+
+          
+
+    //Appending new Row:
+    $("#userDetailTable" ).append(currentROw);
+
+   
+   
+// index=index+1;
+
+$("#userDetailForm" )[0].reset();
+
+
+ });
+
+
+
+        //working of Reset table Button:
+        $("#resetTableButton").click(function(){
+            $('#userDetailTable').find("tr:gt(0)").remove();
+               // $("#userDetailTable tr").remove();
+               index=1;
+        });
+        
+        //deteting-current-row
+        $("#userDetailTable").on('click','#delete-current-row-button',function (){
+          
+            $(this).closest("tr").remove();
+
+            //FInd total tr inside the table
+           var totalRows=($("#userDetailTable tr").length - 1);          
+
+            for (i = 0; i < totalRows; i++) {
+               var row =  $("#userDetailTable").find("tr").eq(i+1);
+               
+            //    console.log(row);
+               var indexTd = row.find("td").eq(0);
+            //    console.log(indexTd);
+               indexTd.html(i+1);
+
+               
+           }
+
+        });
+
+    
+    
+    
+    
+    
+    
+        //functioning-of-edit-button:
+    $("#userDetailTable").on('click','#edit-current-row-button',function (){
+        console.log("Edit button clicked");
+        $("#submitButton").addClass('d-none');
+        //$("#updateButton").show();
+        $("#updateButton").removeClass('d-none');
+        
+        
+
+         currentROw = $(this).closest("tr");
+        
+
+
+            //Retrieved values from table rows
+        var firstName = currentROw.find("td").eq(1).html();
+        var lastName = currentROw.find("td").eq(2).html();
+        var email = currentROw.find("td").eq(3).html();
+        var mobileNo = currentROw.find("td").eq(4).html();
+        
+
+        //Setting Retrieved values to corrresponding text fields
+        $("#firstName").val(firstName);
+        $("#LastName").val(lastName);
+        $("#email").val(email);
+        $("#mobile-no").val(mobileNo);
+
+        
+
+        });
+
+
+  // Functioning of update button:
+
+  $("#updateButton").click(function(){
+    $("#submitButton").removeClass('d-none');
+    $("#updateButton").addClass('d-none');
+   
+
+var firstName=$("#firstName").val();
+var lastName=$("#LastName").val();
+var email=$("#email").val();
+var mobile=$("#mobile-no").val();
+
+//Find closed tr
+//$(this).closest('tr');
+
+
+// currentROw.find('td').eq(1).html(firstName);
+// currentROw.find('td').eq(2).html(lastName);
+// currentROw.find('td').eq(3).html(email);
+// currentROw.find('td').eq(4).html(mobile);
+console.log(currentROw.find('td').eq(1)[0]);
+
+//$("table tbody").find($(currentROw)).replaceWith(new_row);
+
+  
+$("#userDetailForm" )[0].reset();
+
+
+
+
+})
+
+//functioning of Reset button:-
+$("#userDetailForm").on('click','#resetButton',function (){
+    $("#userDetailForm" )[0].reset();
+
+})
+
+
+    });
+
+
+    
+    
+    
+    </script>
+  </head>
+
+
+  <body>
+
+
+<!--Registration-form-->
+ 
+<div class="container  ">
+
+    <br>
+    
+    <div class="row">
+        <h4>User Detail Registration Form</h4>
+    </div>
+    <hr>
+    <form class="" id="userDetailForm">
+        <div class="form-group row">
+            
+                <label for="firstName" class="col-form-label col-sm-4" id="i1" name="FirstName">First Name</label>
+            <input type="text" class="form-control col-sm-8" placeholder="First Name" id="firstName">
+        </div>
+          
+     <div class="form-group row">
+
+        <label for="LastName" class=" col-form-label col-sm-4">Last Name</label>
+        <input type="text" class="form-control col-sm-8" id="LastName" placeholder="Last Name">
+     </div>
+
+
+
+       <div class="form-group row">
+        <label for="email" class="col-form-label col-sm-4">Email</label>
+        <input type="text" class="form-control col-sm-8"  id="email" placeholder="Email">
+    </div>
+    <div class="form-group row" >
+        <label for="mobile-no" class="col-form-label col-sm-4">Mobile No.</label>
+        <input type="tel" class="form-control col-sm-8" placeholder="Mobile No." id="mobile-no">
+
+    </div>
+
+<!--Submit,Update and Reset Buttons-->
+    <div class="form-group row" >
+        <label for="" class="col-form-label col-sm-4">&nbsp;</label>
+        <input type="button" class="btn btn-success btn-md mr-3" id="submitButton" value="Submit"> 
+        <input type="button"  class="btn btn-success btn-md d-none mr-3"  id="updateButton" value="Update ">
+
+        <input type="button" class="btn btn-primary btn-md mr-3" id="resetButton" value="Reset">
+       
+
+    </div>
+
+    
+
+
+    </form>
+
+
+    <table class="table table-responsive-lg" id="userDetailTable">
+        <tr class="table-primary">
+            <th>S No.</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+
+            <th>Email</th>
+            <th>Mobile No.</th>
+            <th>Action</th>
+        </tr>
+
+
+
+    </table>
+
+
+    <hr>
+
+    <div class="row justify-content-center ">
+     
+            <button class="btn btn-warning" id="resetTableButton">Reset Table</button>
+    </div>
+
+
+</div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>
