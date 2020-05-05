@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery Validator</title>
+    <!--jQuery Library CDN-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!--jQuery Validator CDN-->
+    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+</head>
+<script>
+   
+
+
+   $(function(){
+  $("#userDetails").validate({
+    rules:{
+      first_name:{
+        required:true,
+      }, 
+      last_name:{
+          required:true,
+      },
+      e_mail:{
+          required:true,
+          email:true,
+          
+      },
+      Mobile_no:{
+        required:false,
+        number: true,
+
+        
+      },
+     
+
+    },
+    messages:{
+        first_name:{
+        required:'Please enter  First Name ',
+      },
+      last_name:{
+          required:"Please enter  Last Name ",
+      },
+        e_mail:{
+          required:"Please Enter E-Mail",
+          email:"Please Enter A Valid E-Mail",
+          
+      },
+      Mobile_no:{
+        number: "please enter valid mobile no.",
+      },
+      
+    }
+  })
+})
+</script>
+<body>
+    
+
+
+<div class="container justify-content-center">
+    <div class="row mb-4">
+        <h4 class="display-5 text-primary">User Detail Form</h4>
+    </div>
+    <div class="row">
+       
+        <form name="userDetailForms" id="userDetails"> 
+            <div class="row mb-4">
+                <label for="firstName" class="col-5 ">First Name</label>
+                <input type="text" name="first_name" id="firstName" class="col-7">
+            </div>
+            <div class="row mb-4">
+                <label for="lastName" class="col-5">Last Name</label>
+                <input type="text" name="last_name" id="lastName" class="col-7">
+            </div>
+            
+
+            <div class="row mb-4">
+                <label for="emailAddress" class="col-5">Email Address</label>
+                <input type="text" name="e_mail" id="emailAddress" class="col-7">
+            </div>
+
+            <div class="row mb-4">
+                <label for="MobileNo" class="col-5">Mobile No.</label>
+                <input type="text" name="Mobile_no" id="MobileNo" class="col-7">
+            </div>
+            <div class="row justify-content-center">
+                <button type="submit" class="btn btn-success">Submit</button>&nbsp;&nbsp;
+                <button type="reset" class="btn btn-warning">Reset</button>
+            </div>
+            
+        </form></div>
+</div>
+
+
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src = " https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+   
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
