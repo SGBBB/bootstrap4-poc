@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!--jQuery Validator CDN-->
+    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+    <script>
+         $(document).ready(function(){
+
+             var apiUrl = "http://dummy.restapiexample.com/api/v1/employees";
+           
+            $.ajax({
+                type: 'GET',
+                url:apiUrl,
+                success:function(response){
+                        console.log(response);
+                        var data = response.data;
+                        var status = response.status;
+                        if(status == "success") {
+                            for(var index = 0; index < data.length; index++) {
+                                var empData = data[index];
+
+                                console.log(empData);
+
+                                var id = empData.id;
+                                var empName = empData.employee_name;
+                                var empSal = empData.employee_salary;
+                                var empAge = empData.employee_age;
+
+                                var tblRow = "<tr><td>"+id+"</td><td>"+empName+"</td><td>"+empSal+"</td><td>"+empAge+"</td></tr>";
+
+                              $("#employeeDetailsTbl").append(tblRow);
+
+                            }
+                        }
+                },
+                error: function(error){
+                    console.log(error);
+                }
+            });
+
+        });
+    </script>
+</head>
+<body>
+
+
+
+    <div class="mt-4">
+
+        <table class="table table-responsive" id="employeeDetailsTbl">
+           <tr>
+            <th>ID</th>
+            <th>Employee Name</th>
+            <th>Employee Salary</th>
+            <th>Employee Age</th>
+           </tr>
+           
+        </table>
+    </div>
+    
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</body>
+</html>
