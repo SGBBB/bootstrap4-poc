@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!--jQuery Library CDN-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <!--jQuery Validator CDN-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+  <title>Details Sign Up Page</title>
+  <script>
+    //validation aapplication:-
+
+
+
+    //ready() function
+    $(document).ready(function () {
+
+      //toastr optins directly picked from configurations:-
+      toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-center",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      }
+      // var radioValue;
+      // click event:-
+      $("#signUpButton").on("click", function () {
+
+       var dob=$('#dateOfBirth').val();
+      //  console.log('dob is=>');console.log(dob);
+       
+       
+       var dobDate=new Date(dob);
+var convertedDate=dobDate.getDate()+'-'+eval(dobDate.getMonth()+1)+'-'+dobDate.getFullYear();
+
+        formData = {
+          firstName: $("#firstName").val(),
+          lastName: $("#lastName").val(),
+          email: $("#email").val(),
+          password: $("#password").val(),
+          gender:  $('input[name="gender"]:checked').val(),
+          dateOfBirth:convertedDate,
+          profilePhoto: "",
+        }
+
+
+        var apiUrl = "https://springboot-users-crud.herokuapp.com/api/auth/signup";
+        var jsonString = JSON.stringify(formData);
+
+        $.ajax({
+          type: 'POST',
+          url: apiUrl,
+          data: jsonString,
+          dataType: 'json',
+
+          contentType: 'application/Json',
+
+          //    encode          : true,
+
+
+          //space for success response
+          success: function (details) {
+
+            console.log(details);
+
+            if (details.status == "success") {
+              console.log("inside deetails.status block");
+              // $('#toastrOptions').text("Successfully Reg"
+
+              //           );
+              //  toastr.info("Sucessfully Reg");
+              toastr.success(details.message);
+            }
+            else {
+              console.log("error encountered");
+
+              toastr.error(details.message);
+            }
+
+          },
+          //space for error response
+          error: function (errors) {
+            console.log(errors);
+
+            if (errors.status == 0) {
+              toastr.error(errors.statusText);
+            }
+            else {
+              toastr.error(errors.responseJSON.message);
+            }
+
+
+          }
+        });
+
+      });
+    });
+  </script>
+</head>
+
+<body>
+
+  <div class="container mt-5">
+    <div class="card border-primary">
+      <div class="row justify-content-center  ">
+        <h5 class="display-5 text-primary">Sign Up </h5>
+      </div>
+    </div>
+    <hr>
+    <div class="row" style='margin-top: 25px;'>
+
+      <pre id='toastrOptions'></pre>
+
+    </div>
+    <hr>
+    <div class="div">
+      <form id="LoginForm">
+        <div class="row form-group mt-5">
+          <label for="firstName" class="form-label col-3">First Name</label>
+          <input type="text" class="form-control col-9" id="firstName" name="firstName">
+        </div>
+
+        <div class="row form-group">
+          <label for="lastName" class="col-3">Last Name</label>
+          <input type="text" class="form-control col-9" id="lastName" name="lastName">
+        </div>
+        <div class="row form-group">
+          <label for="email" class="col-3">Email</label>
+          <input type="email" class="form-control col-9" id="email" name="email">
+        </div>
+
+        <div class="row form-group">
+          <label for="password" class="col-3">Password</label>
+          <input type="password" class="form-control col-9" id="password" name="password">
+        </div>
+
+        <div class="row form-group">
+          <label class="col-3">Gender</label>
+
+          <div class="form-check-inline">
+            <label class="form-check-label" for="male">
+              <input type="radio" class="form-check-input" id="male" name="gender" value="Male">Male
+            </label>
+          </div>
+          <div class="form-check-inline">
+            <label class="form-check-label" for="female">
+              <input type="radio" class="form-check-input" id="female" name="gender" value="Female">Female
+            </label>
+          </div>
+        </div>
+
+        <div class="row form-group">
+          <label for="dateOfBirth" class="col-3">Date of Birth</label>
+          <input type="date" class="form-control col-9" id="dateOfBirth" name="dateOfBirth">
+        </div>
+        <div class="row form-group">
+          <label for="profilePicture" class="col-3">Profile Photo</label>
+          <input type="file" class="form-control col-9" id="profilePicture" name="profilePicture">
+        </div>
+        <div class="row justify-content-center mt-5">
+          <input type="button" name="signUpButton" id="signUpButton" class="btn btn-primary mr-5" value="Sign Up">
+          <input type="button" name="loginButton" id="loginButton" class="btn btn-primary"
+            value="Already have an account?Login">
+        </div>
+
+
+      </form>
+    </div>
+  </div>
+
+
+
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+</body>
+
+</html>

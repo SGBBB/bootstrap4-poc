@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--jQuery Library CDN-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!--jQuery Validator CDN-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <title>User Listing Page</title>
+    <script>
+        //Validation:-
+        $(function () {
+            $("#LoginForm").validate({
+                rules: {
+                    firstName: "required",
+                    lastName: { required: true, },
+                    email: {
+                        required: true,
+                        email: true,
+                    },
+
+                },
+            })
+
+        });
+        //end of validation
+
+        //ready method:
+        $(document).ready(function () {
+            loadUsersList();
+
+        });
+        //end of ready method
+
+
+        //start of loadList():--->
+        function loadUsersList() {
+            var accessToken = localStorage.getItem("AccessToken");
+
+            console.log(accessToken);
+            var LoggedInUsername = localStorage.getItem("firstNameId");
+
+
+            // var headers = new Headers();
+            // headers.append('Authorization', 'Bearer ' + accessToken);
+
+            var headers = {
+                'Authorization': 'Bearer ' + accessToken
+            };
+
+
+
+            var apiUrl = "https://springboot-users-crud.herokuapp.com/api/users";
+            $.ajax({
+                type: 'GET',
+                url: apiUrl,
+                headers: headers,
+                success: function (response) {
+                    console.log(response);
+                    var data = response.data;
+                    var status = response.status;
+                    if (response.status == "success") {
+
+
+
+                        $("table").find("tr:gt(0)").empty();
+
+
+
+                        $("#firstName_id").text(LoggedInUsername);
+                        var length = response.users.length;
+
+
+                        for (var index = 0; index < length; index++) {
+                            var count = index + 1;
+                            var firstName = response.users[index].firstName;
+                            var lastName = response.users[index].lastName;
+                            var email = response.users[index].email;
+                            var gender = response.users[index].gender;
+                            var DateOfBirth = response.users[index].dateOfBirth; //pb
+                            var userId = response.users[index].id;
+
+
+
+
+                            currentROw = '<tr>'
+                                + '<td id="ind">' + count + '</td>'
+                                + '<td>' + firstName + '</td>'
+                                + '<td>' + lastName + '</td>'
+                                + '<td>' + email + '</td>'
+                                + '<td>' + gender + '</td>'
+                                + '<td>' + DateOfBirth + '</td>'
+                                + '<td><button class="btn btn-success mr-3" onclick="openModal(\'' + userId + '\');" id="edit_btn_' + userId + '">Edit</button>'
+                                + ' <button class="btn btn-danger" id="delete_btn_' + userId + '" >Delete</button> </td>'
+                                + '</tr>';
+
+
+                            //Appending new Row:
+                            $("table").append(currentROw);
+                        }
+
+                    }
+
+                },
+
+                //for error response:-
+                error: function (error) {
+                    console.log(error);
+                    if (error.status == 401) {
+                        location.replace("login.html");
+                    }
+                },
+            })
+        }
+        //End of loadList()
+
+        //start of logout():---->
+        function logout() {
+            //toastr.warning('Do you really wish to Logout
+            localStorage.removeItem("AccessToken");
+            localStorage.removeItem("AccessToken");
+
+            location.replace("login.html");
+        }
+
+
+
+        //Opening Modal 
+        function openModal(userId) {
+            //Ensuring all input fields are empty brfore opening of Modal:-
+            $("#LoginForm")[0].reset();
+
+            //Opening of Modal
+            $('#updateUserModal').modal('show');
+
+
+            //Applying Find One User:
+            var accessToken = localStorage.getItem("AccessToken");
+
+            // console.log(accessToken);
+            var LoggedInUsername = localStorage.getItem("firstNameId");
+
+
+            // var headers = new Headers();
+            // headers.append('Authorization', 'Bearer ' + accessToken);
+
+            var headers = {
+                'Authorization': 'Bearer ' + accessToken
+            };
+            var apiUrl = "https://springboot-users-crud.herokuapp.com/api/users/" + userId;
+            $.ajax({
+                type: 'GET',
+                url: apiUrl,
+                headers: headers,
+                success: function (response) {
+                    // console.log('After Success response=> ');
+
+                    console.log(response);
+
+                    var status = response.status;
+                    var userFirstName = response.user.firstName;
+                    var userLastName = response.user.lastName;
+                    var userEmail = response.user.email;
+                    var userGender = response.user.gender;
+                    // if(response.user.dateOfBirth==""){
+                    //     console.log("DOB is null");
+                        
+                    // }
+
+
+                    var userDateOfBirth = response.user.dateOfBirth.split('-');
+
+                    // console.log(userDateOfBirth);
+                    var dobDate = new Date(userDateOfBirth[2] + '-' + userDateOfBirth[1] + '-' + userDateOfBirth[0]);
+                    // console.log('dobDate is');
+
+                    // console.log(dobDate);
+
+                    var convertedDate = dobDate.getFullYear() + '-' + formatDateAndMonth(eval(dobDate.getMonth() + 1)) + '-' + formatDateAndMonth(dobDate.getDate());
+
+                    $("#userId").val(userId);
+
+                    //Setting Values:-
+                    $("#firstName").val(userFirstName);
+                    $("#lastName").val(userLastName);
+                    $("#email").val(userEmail);
+
+                    $('input[name="gender"]').val([userGender])
+                    $("#dateOfBirth").val(convertedDate);
+                },
+
+                //for error response:-
+                error: function (error) {
+                    console.log(error);
+                    if (error.status == 401) {
+                        location.replace("login.html");
+                    }
+                }
+            })
+
+
+        }
+        //End of openModal() Function
+
+        function formatDateAndMonth(val) {
+            // console.log(val);
+            if (val < 10) {
+                val = '0' + val;
+            }
+            return val;
+        }
+
+        //start of UpdateMethod();------>
+        function updateMethod() {
+            console.log("inside UpdateMethod()");
+
+            //toastr optins directly picked from configurations:-
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            var accessToken = localStorage.getItem("AccessToken");
+            var TempId = $("#userId").val();
+            var employeeFirstName = $("#firstName").val();
+            var employeeLastName = $("#lastName").val();
+            var employeeEmail = $("#email").val();
+
+            var employeeGender = $('input[name="gender"]').val()
+            var employeeDateOfBirth = $("#dateOfBirth").val();
+            //    console.log(employeeDateOfBirth);
+            var dateObject = new Date(employeeDateOfBirth);
+            var apiOrientedDate = dateObject.getDate() + '-' + eval(dateObject.getMonth()) + '-' + dateObject.getFullYear();
+            console.log('apiOrientedDate is---->'); console.log(apiOrientedDate);
+
+
+
+            var headers = {
+                'Authorization': 'Bearer ' + accessToken
+            };
+            var apiUrl = "https://springboot-users-crud.herokuapp.com/api/users/";
+
+
+            formData = {
+                id: TempId,
+                username: employeeEmail,
+                firstName: employeeFirstName,
+                lastName: employeeLastName,
+                email: employeeEmail,
+                gender: employeeGender,
+                dateOfBirth: apiOrientedDate,
+                profilePhoto: "",
+            }
+
+
+
+
+            var jsonString = JSON.stringify(formData);
+
+            $.ajax({
+                url: apiUrl,
+                type: 'PUT',
+                data: jsonString,
+                dataType: 'json',
+                contentType: 'application/Json',
+                headers: headers,
+                success: function (response) {
+                    console.log(response);
+
+                    loadUsersList();
+                    toastr.success("List Updated..!");
+
+                },
+                //for error response:-
+                error: function (error) {
+                    console.log(error);
+                },
+            });
+
+            $('#updateUserModal').modal('hide')
+
+        }
+   //End of updateMethod()
+    </script>
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <div class="row  d-flex justify-content-end ">
+            <h5 class="display-5 text-primary">Welcome: <span id="firstName_id" class="text-secondary
+
+    "></span> <button class="btn btn-primary ml-3" onclick="logout()">Logout</button> </h5>
+        </div>
+
+        <div class="card border-primary mt-3 ">
+            <div class="row justify-content-center">
+                <h5 class="display-6 text-primary">User Listing Page</h5>
+            </div>
+        </div>
+        <div class="div">
+            <table class="table table-responsive-lg mt-5">
+                <tr class="table-primary">
+                    <th>S No.</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Gender</th>
+                    <th>Date Of Birth</th>
+                    <th>Action</th>
+
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="updateUserModal" tabindex="-1" role="dialog" aria-labelledby="updateUserModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="d-flex justify-content-center modal-header ">
+                    <!-- <h5 class="modal-title" id="updateUserModalLabel">User details Updation Page </h5> -->
+                    <div class=" modal-title">
+                        <div class="row justify-content-center  ">
+                            <h5 class="display-5 text-primary">Update User Details </h5>
+                        </div>
+                    </div>
+                    <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button> -->
+                </div>
+                <div class="modal-body">
+                    <div class="container mt-5">
+
+
+                        <div class="div">
+                            <form id="LoginForm">
+                                <div class="row form-group mt-5">
+                                    <label for="firstName" class="form-label col-3">First Name</label>
+                                    <input type="text" class="form-control col-9" id="firstName" name="firstName">
+                                    <input type="hidden" class="form-control col-9" id="userId" name="userId"
+                                        value="werwrfrerrfsdfds">
+                                </div>
+
+                                <div class="row form-group">
+                                    <label for="lastName" class="col-3">Last Name</label>
+                                    <input type="text" class="form-control col-9" id="lastName" name="lastName">
+                                </div>
+                                <div class="row form-group">
+                                    <label for="email" class="col-3">Email</label>
+                                    <input type="email" class="form-control col-9" id="email" name="email">
+                                </div>
+
+
+                                <div class="row form-group">
+                                    <label class="col-3">Gender</label>
+                                    <div class="form-check-inline">
+                                        <label for="male" class="form-check-label">
+                                            <input type="radio" class="form-check-input" id="male" name="gender"
+                                                value="male">Male
+                                        </label>
+                                    </div>
+                                    <div class="form-check-inline">
+                                        <label for="female" class="form-check-label">
+                                            <input type="radio" class="form-check-input" id="female" name="gender"
+                                                value="Female">Femle
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="row form-group">
+                                    <label for="dateOfBirth" class="col-3">Date of Birth</label>
+                                    <input type="date" class="form-control col-9" id="dateOfBirth" name="dateOfBirth">
+                                </div>
+                                <div class="row form-group">
+                                    <label for="profilePicture" class="col-3">Profile Photo</label>
+                                    <input type="file" class="form-control col-9" id="profilePicture"
+                                        name="profilePicture">
+                                </div>
+                                <!-- <div class="row justify-content-center mt-5">
+                           <input type="submit" name="signUpButton" id="signUpButton" class="btn btn-primary mr-5" value="Sign Up">
+                           <input type="button" name="loginButton" id="loginButton" class="btn btn-primary" value="Already have an account?Login">
+                       </div> -->
+
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-success" onclick="updateMethod();">Update</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src=" https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+</body>
+
+</html>
