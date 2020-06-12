@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <!--jQuery Library CDN-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <!--jQuery Validator CDN-->
+  <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+  <title>Update Details Page</title>
+<script>
+    $(function(){
+       
+        
+        $("#LoginForm").validate({
+            debug:false,
+            rules:{
+                email:{
+                    required:true,
+                   email:true,
+                },
+
+                password:{
+                    required:true,
+                    min:6,
+                    max:40,
+                    
+                },
+            }
+        })
+    });
+</script>
+</head>
+<body>
+
+<div class="container mt-5">
+ <div class="card border-primary">
+    <div class="row justify-content-center  "> <h5 class="display-5 text-primary">Update User Details </h5>
+    </div>
+ </div>
+
+   <div class="div">
+       <form id="LoginForm" >
+          <div class="row form-group mt-5">
+              <label for="firstName" class="form-label col-3">First Name</label>
+              <input type="text" class="form-control col-9" id="firstName" name="firstName">
+          </div>
+
+          <div class="row form-group">
+            <label for="lastName" class="col-3">Last Name</label>
+            <input type="text" class="form-control col-9" id="lastName" name="lastName">
+        </div>
+        <div class="row form-group">
+            <label for="email" class="col-3">Email</label>
+            <input type="email" class="form-control col-9" id="email" name="email">
+        </div>
+        
+        <div class="row form-group">
+            <label for="password" class="col-3">Password</label>
+            <input type="password" class="form-control col-9" id="password" name="password">
+        </div>
+
+        <div class="row form-group">
+            <label  class="col-3">Gender</label>
+            <div class="form-check-inline">
+                <label for="male" class="form-check-label">
+                    <input type="radio" class="form-check-input" id="male" name="gender" >Male
+                </label>
+            </div>
+            <div class="form-check-inline">
+                <label for="female" class="form-check-label">
+                    <input type="radio" class="form-check-input" id="female" name="gender" >Femle
+                </label>
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <label for="dateOfBirth" class="col-3">Date of Birth</label>
+            <input type="date" class="form-control col-9" id="dateOfBirth" name="dateOfBirth">
+        </div>
+        <div class="row form-group">
+            <label for="profilePicture" class="col-3">Profile Photo</label>
+            <input type="file" class="form-control col-9" id="profilePicture" name="profilePicture">
+        </div>
+        <div class="row justify-content-center mt-5">
+            <input type="submit" name="signUpButton" id="signUpButton" class="btn btn-primary mr-5" value="Sign Up">
+            <input type="button" name="loginButton" id="loginButton" class="btn btn-primary" value="Already have an account?Login">
+        </div>
+
+
+       </form>
+   </div>
+</div>
+
+
+    
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src = " https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.1/jquery.validate.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+ 
+</body>
+</html>
